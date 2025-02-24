@@ -1,0 +1,26 @@
+import { createApp } from "vue";
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-zoom.css";
+import "swiper/css/effect-fade";
+import "swiper/css/free-mode";
+import "swiper/css/grid";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+import "../src/assets/vendor/switcher/switcher.css";
+import "../src/assets/scss/components/_nouislider.scss";
+import "swiper/css";
+import "./assets/css/style.css";
+import App from "./App.vue";
+import router from "./router";
+import i18n from "@/core/plugins/i18n";
+import ApiService from "@/core/services/ApiService";
+
+const app = createApp(App);
+app.use(i18n);
+app.use(router);
+ApiService.init(app);
+app.mount("#app");

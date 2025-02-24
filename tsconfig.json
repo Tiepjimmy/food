@@ -1,0 +1,18 @@
+{
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "target": "es2020",          // Cập nhật target thành ES2020 hoặc cao hơn
+    "module": "es2020",          // Cập nhật module thành ES2020 hoặc cao hơn
+    "moduleResolution": "node",  // Đảm bảo module resolution theo kiểu Node.js
+    "strict": true,              // Bật chế độ strict để kiểm tra lỗi tốt hơn
+    "esModuleInterop": true,     // Hỗ trợ import/export ES Modules
+    "skipLibCheck": true,        // Tùy chọn này có thể giúp bỏ qua kiểm tra loại trong các thư viện
+    "resolveJsonModule": true    //
+  },
+}
