@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import HeaderNev2 from "../components/HeaderNev2.vue";
-import HeaderRightSider from "../elements/HeaderRightSider.vue";
+import SignIn from "../elements/SignIn.vue";
 
 const setHeader = ref(false);
 const open = ref(false);
@@ -183,5 +183,5 @@ window.onscroll = () => {
     </div>
     <!-- Main Header End -->
   </header>
-  <HeaderRightSider />
+  <SignIn />
 </template>

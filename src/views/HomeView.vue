@@ -17,11 +17,6 @@ watchEffect(function () {
   localStorage.setItem("addbgActive", 0);
 });
 
-
-
-
-
-
 </script>
 <template>
   <div class="page-content bg-white">

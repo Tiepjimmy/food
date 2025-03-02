@@ -7,7 +7,7 @@ import shopPic1 from "../assets/images/shop/pic1.jpg";
 import shopPic2 from "../assets/images/shop/pic2.jpg";
 import shopPic3 from "../assets/images/shop/pic3.jpg";
 import { RouterLink } from "vue-router";
-import Header4 from "../Layouts/Header4.vue";
+import Header from "../Layouts/Header.vue";
 import Footer4 from "../Layouts/Footer4.vue";
 
 const cartitem = [
@@ -51,7 +51,7 @@ const cartCounterBtn = (action, ind) => {
 
 <template>
   <div class="page-content bg-white">
-    <Header4 />
+    <Header />
     <CommonBanner :img="bgimg" heading="Shop Cart" title="Shop Cart" />
     <section class="content-inner-1">
       <div class="container">

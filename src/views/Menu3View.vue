@@ -94,6 +94,7 @@ const filterButton = (el, name) => {
     galleryList = gallery;
   }
 };
+
 </script>
 
 <template>

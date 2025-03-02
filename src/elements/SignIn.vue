@@ -6,35 +6,35 @@ import { useAuthStore, type User } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
+import Register from "@/elements/Register.vue";
+
 
 export default defineComponent({
-  name: "register",
+  name: "sign-in",
   components: {
+    Register,
     Field,
     VForm,
     ErrorMessage,
   },
   setup() {
     const store = useAuthStore();
-    const userName = ref();
+    const router = useRouter();
+    const username = ref();
     const password = ref()
-    const fullName = ref()
 
 
     //Create form validation object
     const login = Yup.object().shape({
-      userName: Yup.string().required().label("User Name"),
+      email: Yup.string().required().label("UserName"),
       password: Yup.string().min(8).required().label("Password"),
-      fullName: Yup.string().min(60).required().label("Fullname"),
     });
 
     //Form submit function
     const onSubmitLogin = async () => {
-      console.log(login)
       let users = {
-        userName: userName.value,
+        username: username.value,
         password: password.value,
-        fullName: fullName.value
       } as User
       console.log(password,2)
       // Clear existing errors
@@ -43,13 +43,12 @@ export default defineComponent({
       console.log(users)
 
       // Send login request
-      await store.register(users);
+      await store.login(users);
       const error = Object.values(store.errors);
-      console.log(error)
 
       if (error.length === 0) {
         Swal.fire({
-          text: "Đăng nhập thành công!",
+          text: "Đăng ký thành công!",
           icon: "success",
           buttonsStyling: false,
           confirmButtonText: "Đóng",
@@ -67,7 +66,7 @@ export default defineComponent({
           text: error[0] as string,
           icon: "error",
           buttonsStyling: false,
-          confirmButtonText: "Đóng!",
+          confirmButtonText: "DDa!",
           heightAuto: false,
           customClass: {
             confirmButton: "btn fw-semobold btn-light-danger",
@@ -83,8 +82,7 @@ export default defineComponent({
 
     return {
       login,
-      userName,
-      fullName,
+      username,
       password,
       getAssetPath,
       onSubmitLogin,
@@ -93,11 +91,11 @@ export default defineComponent({
 });
 </script>
 
-<template>
+<template >
   <div
     class="offcanvas offcanvas-end"
     tabindex="-1"
-    id="offcanvasRegister"
+    id="offcanvasLogin"
     aria-modal="true"
     role="dialog"
   >
@@ -160,23 +158,11 @@ export default defineComponent({
           <label class="form-label">Email*</label>
           <div class="input-group">
             <input
-                name="fullname"
-                v-model="fullName"
-                type="text"
-                class="form-control"
-                placeholder="Enter Your Full Name"
-            />
-          </div>
-        </div>
-        <div class="form-group m-b15">
-          <label class="form-label">Email*</label>
-          <div class="input-group">
-            <input
-              name="username"
-              v-model="userName"
+              name="userName"
+              v-model="username"
               type="text"
               class="form-control"
-              placeholder="Enter Your User Name"
+              placeholder="Enter Your userName"
             />
           </div>
         </div>
@@ -219,6 +205,8 @@ export default defineComponent({
         </div>
         <button
           @click="onSubmitLogin"
+          :validation-schema="login"
+          :initial-values="{ userName: 'admin@demo.com', password: 'demo' }"
           class="btn btn-primary w-100 d-block btn-hover-2"
         >
           <span>Sign In</span>
@@ -237,4 +225,5 @@ export default defineComponent({
       </div>
     </div>
   </div>
+  <Register />
 </template>

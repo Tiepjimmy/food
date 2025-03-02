@@ -1,16 +1,28 @@
 <script setup>
-import { ref } from "vue";
+import {ref, watch} from "vue";
 import HeaderNav from "../components/HeaderNav.vue";
-import HeaderRightSider from "../elements/HeaderRightSider.vue";
+import SignIn from "../elements/SignIn.vue";
 import { RouterLink } from "vue-router";
+import {useAuthStore} from "@/stores/auth";
 
 const open = ref(false);
 const setHeader = ref(false);
+const store = useAuthStore();
+const checkUser = ref(store.user.userName ?? false);
+
+watch(store, async (newQuestion) => {
+  checkUser.value = false;
+  if (newQuestion.user.userName) {
+    checkUser.value = true
+  }
+})
+
 window.onscroll = () => {
   window.scrollY > 80 ? (setHeader.value = true) : (setHeader.value = false);
 };
 
 const extraNav = ref(false);
+const extrainInfoUser = ref(false);
 
 const rightNavbar = () => {
   extraNav.value = !extraNav.value;
@@ -21,7 +33,19 @@ const rightNavbar = () => {
   );
   setTimeout(() => {
     cartList.classList.toggle("show-cart-list");
-  }, 500);
+  }, 10);
+};
+
+const showInfoUser = () => {
+  extrainInfoUser.value = !extrainInfoUser.value;
+  let infoUser = document.getElementById("infoUser");
+  infoUser?.setAttribute(
+      "style",
+      `display:${extrainInfoUser.value === true ? "block" : "none"}`
+  );
+  setTimeout(() => {
+    infoUser?.classList.toggle("show-info-user");
+  }, 10);
 };
 
 const cartItemClose = (e) => {
@@ -33,7 +57,11 @@ const cartItemClose = (e) => {
       "display:none"
     );
   }, 300);
+}
+const signOut = () => {
+  store.logout();
 };
+
 </script>
 
 <template>
@@ -77,17 +105,6 @@ const cartItemClose = (e) => {
           <div class="extra-nav">
             <div class="extra-cell">
               <ul>
-                <li>
-                  <a
-                    class="btn btn-white btn-square btn-shadow"
-                    data-bs-toggle="offcanvas"
-                    href="#offcanvasLogin"
-                    role="button"
-                    aria-controls="offcanvasLogin"
-                  >
-                    <i class="flaticon-user"></i>
-                  </a>
-                </li>
                 <li>
                   <button
                     type="button"
@@ -196,6 +213,31 @@ const cartItemClose = (e) => {
                     </li>
                   </ul>
                 </li>
+                <li v-if="!checkUser">
+                  <a
+                      class="btn btn-white btn-square btn-shadow"
+                      data-bs-toggle="offcanvas"
+                      href="#offcanvasLogin"
+                      role="button"
+                      aria-controls="offcanvasLogin"
+                  >
+                    <i class="flaticon-user"></i>
+                  </a>
+                </li>
+                <li v-else>
+                  <div class="user-profile"  @click="showInfoUser">
+                    <img src="https://via.placeholder.com/50" alt="User" class="user-avatar" id="userAvatar">
+                    <div class="dropdown-menu" id="infoUser">
+                      <ul>
+                        <li><a href="#">Thông tin cá nhân</a></li>
+                        <li><a href=""> <router-link to="/shop-cart" class="text-primary"
+                        >Giỏ hàng</router-link
+                        ></a></li>
+                        <li><a class="sign-out" @click="signOut">Đăng xuất</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -213,10 +255,13 @@ const cartItemClose = (e) => {
     </div>
     <!-- Main Header End -->
   </header>
-  <HeaderRightSider />
+  <SignIn />
 </template>
 
 <style scoped>
+#userAvatar {
+  cursor: pointer;
+}
 .cart-list {
   height: 0px;
   overflow: hidden;
@@ -227,8 +272,28 @@ const cartItemClose = (e) => {
   opacity: 1;
   transition: all 0.4s linear;
 }
+
+.show-info-user {
+  height: auto;
+  opacity: 1;
+  transition: all 0.2s linear;
+  left: 72px;
+  padding: 10px;
+  top: 64px;
+}
+.user-profile ul li {
+  margin-bottom: 5px;
+}
 .remove-cart-list {
   transform: translateX(-100%);
   transition: all 0.4s linear;
+}
+.sign-out {
+  outline: none;
+  color: var(--primary);
+  -webkit-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  transition: all 0.5s;
+  cursor: pointer;
 }
 </style>

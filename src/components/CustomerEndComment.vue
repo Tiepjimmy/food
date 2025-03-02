@@ -35,14 +35,14 @@ const setThumbsSwiper = (swiper) => {
 
 const getData = async () => {
   try {
-    const response = await ApiService.get('/v1');
+    const response = await ApiService.get('users/listAll');
     this.data = response.data;
   } catch (error) {
     console.error('There was an error!', error);
   }
 }
 onBeforeMount(() => {
-  getData();
+  // getData();
   console.log('First onBeforeMount');
 });
 

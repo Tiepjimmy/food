@@ -14,13 +14,17 @@ import "../src/assets/vendor/switcher/switcher.css";
 import "../src/assets/scss/components/_nouislider.scss";
 import "swiper/css";
 import "./assets/css/style.css";
+import "./assets/css/homePage.css";
 import App from "./App.vue";
 import router from "./router";
 import i18n from "@/core/plugins/i18n";
 import ApiService from "@/core/services/ApiService";
+import { createPinia } from 'pinia';
 
 const app = createApp(App);
+const pinia = createPinia();
 app.use(i18n);
 app.use(router);
+app.use(pinia);
 ApiService.init(app);
 app.mount("#app");

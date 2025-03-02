@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import HeaderNav from "../components/HeaderNav.vue";
-import HeaderRightSider from "../elements/HeaderRightSider.vue";
+import SignIn from "../elements/SignIn.vue";
 import { RouterLink } from "vue-router";
 
 const setHeader = ref(false);
@@ -209,5 +209,5 @@ const cartItemClose = (e) => {
     </div>
     <!-- Main Header End -->
   </header>
-  <HeaderRightSider />
+  <SignIn />
 </template>
