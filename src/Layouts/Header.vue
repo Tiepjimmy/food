@@ -32,10 +32,9 @@ const rightNavbar = () => {
     `display:${extraNav.value === true ? "block" : "none"}`
   );
   setTimeout(() => {
-    cartList.classList.toggle("show-cart-list");
+    cartList.classLiadminst.toggle("show-cart-list");
   }, 10);
 };
-
 const showInfoUser = () => {
   extrainInfoUser.value = !extrainInfoUser.value;
   let infoUser = document.getElementById("infoUser");
@@ -226,7 +225,7 @@ const signOut = () => {
                 </li>
                 <li v-else>
                   <div class="user-profile"  @click="showInfoUser">
-                    <img src="https://via.placeholder.com/50" alt="User" class="user-avatar" id="userAvatar">
+                    <img src="#" alt="User" class="user-avatar" id="userAvatar">
                     <div class="dropdown-menu" id="infoUser">
                       <ul>
                         <li><a href="#">Thông tin cá nhân</a></li>
@@ -255,7 +254,7 @@ const signOut = () => {
     </div>
     <!-- Main Header End -->
   </header>
-  <SignIn />
+  <SignIn  />
 </template>
 
 <style scoped>
@@ -295,5 +294,9 @@ const signOut = () => {
   -ms-transition: all 0.5s;
   transition: all 0.5s;
   cursor: pointer;
+}
+.offcanvas.show {
+  display: block !important;
+  visibility: visible !important;
 }
 </style>

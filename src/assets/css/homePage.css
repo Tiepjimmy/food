@@ -6,3 +6,14 @@
     text-shadow: 0 0 0 #fff, 500px 0 0 #fff;
     overflow: hidden;
 }
+.btn.btn-light-danger {
+    border-color: var(--bs-tertiary-bg);
+    background-color: var(--bs-danger);
+    color: rgba(0, 0, 0, 0) !important;
+    transition: all .3sease !important;
+    text-shadow: 0 0 0 #fff, 500px 0 0 #fff;
+    overflow: hidden;
+}
+.swal2-backdrop-show {
+    z-index: 9999999;
+}

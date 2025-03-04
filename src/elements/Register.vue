@@ -6,6 +6,7 @@ import { useAuthStore, type User } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
+import {clodeModal} from "@/core/helpers/views";
 
 export default defineComponent({
   name: "register",
@@ -20,6 +21,11 @@ export default defineComponent({
     const password = ref()
     const fullName = ref()
 
+    const showPassword = ref(false);
+
+    const togglePassword = () => {
+      showPassword.value = !showPassword.value;
+    };
 
     //Create form validation object
     const login = Yup.object().shape({
@@ -32,22 +38,16 @@ export default defineComponent({
     const onSubmitLogin = async () => {
       console.log(login)
       let users = {
-        userName: userName.value,
+        username: userName.value,
         password: password.value,
-        fullName: fullName.value
+        fullname: fullName.value
       } as User
-      console.log(password,2)
-      // Clear existing errors
-      // store.logout();
-
-      console.log(users)
-
       // Send login request
       await store.register(users);
       const error = Object.values(store.errors);
-      console.log(error)
 
       if (error.length === 0) {
+        clodeModal("offcanvasRegister")
         Swal.fire({
           text: "Đăng nhập thành công!",
           icon: "success",
@@ -57,10 +57,6 @@ export default defineComponent({
           customClass: {
             confirmButton: "btn fw-semobold btn-light-primary",
           },
-        }).then(() => {
-          // Go to page after successfully login
-          // router.push({ name: "dashboard" });
-          console.log(store.user)
         });
       } else {
         Swal.fire({
@@ -86,8 +82,10 @@ export default defineComponent({
       userName,
       fullName,
       password,
+      showPassword,
       getAssetPath,
       onSubmitLogin,
+      togglePassword,
     };
   },
 });
@@ -185,7 +183,7 @@ export default defineComponent({
           <div class="input-group search-input">
             <input
               name="password"
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               v-model="password"
               class="form-control dz-password"
               placeholder="Enter a Password"
@@ -196,6 +194,7 @@ export default defineComponent({
                 class="eye-close"
                 xmlns="http://www.w3.org/2000/svg"
                 width="22"
+                @click="togglePassword"
                 height="22"
                 fill="#8ea5c8"
               >

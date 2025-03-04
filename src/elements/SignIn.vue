@@ -1,12 +1,14 @@
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref } from "vue";
+import { clodeModal } from "@/core/helpers/views";
+import {defineComponent, ref, watch} from "vue";
 import { ErrorMessage, Field, Form as VForm } from "vee-validate";
 import { useAuthStore, type User } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Register from "@/elements/Register.vue";
+import { Offcanvas } from "bootstrap";
 
 
 export default defineComponent({
@@ -17,13 +19,22 @@ export default defineComponent({
     VForm,
     ErrorMessage,
   },
-  setup() {
+  props:{
+    visible: Boolean
+  },
+  emits: [
+    "update:visible"
+  ],
+  setup(props, { emit }) {
     const store = useAuthStore();
     const router = useRouter();
     const username = ref();
-    const password = ref()
+    const password = ref();
+    const showPassword = ref(false);
 
-
+    const togglePassword = () => {
+      showPassword.value = !showPassword.value;
+    };
     //Create form validation object
     const login = Yup.object().shape({
       email: Yup.string().required().label("UserName"),
@@ -47,6 +58,7 @@ export default defineComponent({
       const error = Object.values(store.errors);
 
       if (error.length === 0) {
+        clodeModal("offcanvasLogin")
         Swal.fire({
           text: "Đăng ký thành công!",
           icon: "success",
@@ -56,17 +68,13 @@ export default defineComponent({
           customClass: {
             confirmButton: "btn fw-semobold btn-light-primary",
           },
-        }).then(() => {
-          // Go to page after successfully login
-          // router.push({ name: "dashboard" });
-          console.log(store.user)
         });
       } else {
         Swal.fire({
           text: error[0] as string,
           icon: "error",
           buttonsStyling: false,
-          confirmButtonText: "DDa!",
+          confirmButtonText: "Đóng!",
           heightAuto: false,
           customClass: {
             confirmButton: "btn fw-semobold btn-light-danger",
@@ -75,17 +83,16 @@ export default defineComponent({
           store.errors = {};
         });
       }
-
-      //Deactivate indicator
-      // eslint-disable-next-line
     };
 
     return {
       login,
       username,
       password,
+      showPassword,
       getAssetPath,
       onSubmitLogin,
+      togglePassword,
     };
   },
 });
@@ -95,8 +102,8 @@ export default defineComponent({
   <div
     class="offcanvas offcanvas-end"
     tabindex="-1"
-    id="offcanvasLogin"
     aria-modal="true"
+    id="offcanvasLogin"
     role="dialog"
   >
     <div class="offcanvas-body">
@@ -111,7 +118,7 @@ export default defineComponent({
           <h4 class="title">Welcome Back</h4>
           <p>
             We’d love have you join our 100% remote network of creatord &amp;
-            freelance.
+            freelance .
           </p>
           <button
             name="submit"
@@ -171,8 +178,8 @@ export default defineComponent({
           <div class="input-group search-input">
             <input
               name="password"
-              type="password"
               v-model="password"
+              :type="showPassword ? 'text' : 'password'"
               class="form-control dz-password"
               placeholder="Enter a Password"
               autocomplete="off"
@@ -182,6 +189,7 @@ export default defineComponent({
                 class="eye-close"
                 xmlns="http://www.w3.org/2000/svg"
                 width="22"
+                @click="togglePassword"
                 height="22"
                 fill="#8ea5c8"
               >
@@ -206,7 +214,7 @@ export default defineComponent({
         <button
           @click="onSubmitLogin"
           :validation-schema="login"
-          :initial-values="{ userName: 'admin@demo.com', password: 'demo' }"
+          :initial-values="{ username: 'temp1', password: '1' }"
           class="btn btn-primary w-100 d-block btn-hover-2"
         >
           <span>Sign In</span>
