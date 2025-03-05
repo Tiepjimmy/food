@@ -32,7 +32,7 @@ const rightNavbar = () => {
     `display:${extraNav.value === true ? "block" : "none"}`
   );
   setTimeout(() => {
-    cartList.classLiadminst.toggle("show-cart-list");
+    cartList.classList.toggle("show-cart-list");
   }, 10);
 };
 const showInfoUser = () => {

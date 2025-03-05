@@ -10,7 +10,7 @@ export interface User {
   username: string;
   fullname: string;
   password: string;
-  api_token: string;
+  token: string;
 }
 
 export const useAuthStore = defineStore("auth", () => {
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", () => {
     isAuthenticated.value = true;
     user.value = authUser;
     errors.value = {};
-    JwtService.saveToken(user.value.api_token);
+    JwtService.saveToken(user.value.token);
   }
 
   function setError(error: any) {
@@ -79,7 +79,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     if (token) {
       ApiService.setHeader();
-      ApiService.post("verify_token", { api_token: token })
+      ApiService.post("verify_token", { token: token })
           .then(({ data }) => {
             setAuth(data);
           })
