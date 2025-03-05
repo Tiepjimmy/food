@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import teampic1 from "../assets/images/team/pic1.jpg";
-import teampic2 from "../assets/images/team/pic2.jpg";
-import teampic3 from "../assets/images/team/pic3.jpg";
-import teampic4 from "../assets/images/team/pic4.jpg";
+import teampic1 from "../assets/images/pic2-5b12c32f.jpg";
+import teampic2 from "../assets/images/pic2-5b12c32f.jpg";
+import teampic3 from "../assets/images/pic2-5b12c32f.jpg";
+import teampic4 from "../assets/images/pic2-5b12c32f.jpg";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Navigation } from "swiper/modules";
 import { RouterLink } from "vue-router";

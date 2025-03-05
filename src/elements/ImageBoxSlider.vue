@@ -1,10 +1,10 @@
 <script setup>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { ref } from "vue";
-import galleryGridpic1 from "../assets/images/gallery/grid2/pic1.jpg";
-import galleryGridpic2 from "../assets/images/gallery/grid2/pic2.jpg";
-import galleryGridpic3 from "../assets/images/gallery/grid2/pic3.jpg";
-import galleryGridpic4 from "../assets/images/gallery/grid2/pic4.jpg";
+import galleryGridpic1 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridpic2 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridpic3 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridpic4 from "../assets/images/pic4-f47abc27.jpg";
 import { Navigation } from "swiper/modules";
 import { RouterLink } from "vue-router";
 

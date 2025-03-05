@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import gallerySmallPic1 from "../assets/images/gallery/small/pic1.jpg";
-import gallerySmallPic2 from "../assets/images/gallery/small/pic2.jpg";
-import gallerySmallPic3 from "../assets/images/gallery/small/pic3.jpg";
-import gallerySmallPic4 from "../assets/images/gallery/small/pic4.jpg";
+import gallerySmallPic1 from "../assets/images/pic3-3cd8c92c.png";
+import gallerySmallPic2 from "../assets/images/pic3-3cd8c92c.png";
+import gallerySmallPic3 from "../assets/images/pic3-3cd8c92c.png";
+import gallerySmallPic4 from "../assets/images/pic3-3cd8c92c.png";
 import { RouterLink } from "vue-router";
 
 const menuBlog = ref([

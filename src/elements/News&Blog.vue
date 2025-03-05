@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import blogGridPic1 from "../assets/images/blog/grid/pic1.jpg";
-import blogGridPic2 from "../assets/images/blog/grid/pic2.jpg";
-import blogGridPic3 from "../assets/images/blog/grid/pic3.jpg";
-import blogGridPic4 from "../assets/images/blog/grid/pic4.jpg";
+import blogGridPic1 from "../assets/images/pic4-f47abc27.jpg";
+import blogGridPic2 from "../assets/images/pic4-f47abc27.jpg";
+import blogGridPic3 from "../assets/images/pic4-f47abc27.jpg";
+import blogGridPic4 from "../assets/images/pic4-f47abc27.jpg";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
 import { RouterLink } from "vue-router";

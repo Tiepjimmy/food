@@ -9,12 +9,18 @@ import {
   EffectFade,
   Pagination,
 } from "swiper/modules";
-import testimonialSmallpic1 from "../assets/images/testimonial/small/pic1.jpg";
-import testimonialSmallpic2 from "../assets/images/testimonial/small/pic2.jpg";
-import testimonialSmallpic3 from "../assets/images/testimonial/small/pic3.jpg";
-import testimonialSmallpic4 from "../assets/images/testimonial/small/pic4.jpg";
-import testimonialSmallpic5 from "../assets/images/testimonial/small/pic5.jpg";
-import testimonialSmallpic6 from "../assets/images/testimonial/small/pic6.jpg";
+// import testimonialSmallpic1 from "../assets/images/testimonial/small/pic1.jpg";
+// import testimonialSmallpic2 from "../assets/images/testimonial/small/pic2.jpg";
+// import testimonialSmallpic3 from "../assets/images/testimonial/small/pic3.jpg";
+// import testimonialSmallpic4 from "../assets/images/testimonial/small/pic4.jpg";
+// import testimonialSmallpic5 from "../assets/images/testimonial/small/pic5.jpg";
+// import testimonialSmallpic6 from "../assets/images/testimonial/small/pic6.jpg";
+import testimonialSmallpic1 from "../assets/images/pic1-c5686cf6.jpg";
+import testimonialSmallpic2 from "../assets/images/pic2-4585b9aa.jpg";
+import testimonialSmallpic3 from "../assets/images/pic2-4585b9aa.jpg";
+import testimonialSmallpic4 from "../assets/images/pic2-4585b9aa.jpg";
+import testimonialSmallpic5 from "../assets/images/pic2-4585b9aa.jpg";
+import testimonialSmallpic6 from "../assets/images/pic2-4585b9aa.jpg";
 
 import ApiService from "@/core/services/ApiService";
 

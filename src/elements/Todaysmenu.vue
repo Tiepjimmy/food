@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from "vue";
-import galleryGridPic2 from "../assets/images/gallery/grid2/pic2.jpg";
-import galleryGridPic5 from "../assets/images/gallery/grid2/pic5.jpg";
-import galleryGridPic4 from "../assets/images/gallery/grid2/pic4.jpg";
-import galleryGridPic6 from "../assets/images/gallery/grid2/pic6.jpg";
-import galleryPic1 from "../assets/images/gallery/grid/pic1.jpg";
-import galleryPic2 from "../assets/images/gallery/grid/pic2.jpg";
-import galleryPic3 from "../assets/images/gallery/grid/pic3.jpg";
-import galleryPic4 from "../assets/images/gallery/grid/pic4.jpg";
+import galleryGridPic2 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridPic5 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridPic4 from "../assets/images/pic4-f47abc27.jpg";
+import galleryGridPic6 from "../assets/images/pic4-f47abc27.jpg";
+import galleryPic1 from "../assets/images/pic4-f47abc27.jpg";
+import galleryPic2 from "../assets/images/pic4-f47abc27.jpg";
+import galleryPic3 from "../assets/images/pic4-f47abc27.jpg";
+import galleryPic4 from "../assets/images/pic4-f47abc27.jpg";
 import { RouterLink } from "vue-router";
 
 const menuList = ref([
