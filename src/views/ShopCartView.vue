@@ -1,7 +1,7 @@
-<script setup>
+<script lang="ts">
 import CommonBanner from "../elements/CommonBanner.vue";
 import SearchResuiltRightContent from "../elements/SearchResuiltRightContent.vue";
-import { ref } from "vue";
+import {computed, defineComponent, ref, watchEffect} from "vue";
 import bgimg from "../assets/images/banner/bnr4.jpg";
 import shopPic1 from "../assets/images/shop/pic1.jpg";
 import shopPic2 from "../assets/images/shop/pic2.jpg";
@@ -9,45 +9,61 @@ import shopPic3 from "../assets/images/shop/pic3.jpg";
 import { RouterLink } from "vue-router";
 import Header from "../Layouts/Header.vue";
 import Footer4 from "../Layouts/Footer4.vue";
+import cartStore from "@/stores/stateCarlItem";
 
-const cartitem = [
-  { img: shopPic1, name: "Double Patty Burger", price: "", num: 1 },
-  { img: shopPic2, name: "Double Patty Burger", price: "", num: 1 },
-  { img: shopPic3, name: "Double Patty Burger", price: "", num: 1 },
-];
+export default defineComponent({
+  name: "shop-cart-view",
+  components: {
+    CommonBanner,
+    SearchResuiltRightContent,
+    RouterLink,
+    Header,
+    Footer4,
+  },
+  setup() {
 
-let cartItemList = ref(cartitem);
+    const cartItem = ref(cartStore.cart); // Sử dụng cartStore để theo dõi giỏ hàng
+    // const cartitem = [
+    //   { img: shopPic1, name: "Double Patty Burger", price: "", num: 1 },
+    //   { img: shopPic2, name: "Double Patty Burger", price: "", num: 1 },
+    //   { img: shopPic3, name: "Double Patty Burger", price: "", num: 1 },
+    // ];
+    const totalPrice = computed(() => cartStore.totalPrice) // Trực tiếp lấy totalPrice từ cartStore
+    const totalProduct = computed(() => cartStore.totalProduct) // Trực tiếp lấy totalPrice từ cartStore
 
-// const cartCounterBtn = (actions) => {
-//   switch (actions) {
-//     case "increment":
-//       cartItemList.value = cartitem.map((ell) => {
-//         return { ...ell, num: (ell.num += 1) };
-//       });
-//       break;
-//     case "decrement":
-//       cartitem.map((ell) => {
-//         return { ...ell, num: ell.num - 1 };
-//       });
-//       cartItemList.value = temp;
-//       break;
-//     default:
-//       break;
-//   }
-// };
+    // Sử dụng watchEffect thay vì watch, để theo dõi trực tiếp từ cartStore
+    watchEffect(() => {
+      cartItem.value = cartStore.cart;  // Cập nhật giỏ hàng khi có thay đổi
+    });
+    const cartItemClose = (productId: number) => {
+      cartStore.removeFromCart(productId);  // Xóa sản phẩm khỏi giỏ hàng
+    };
+    const cartCounterBtn = (action, ind) => {
+      const item = cartItem.value[ind];
 
-const cartCounterBtn = (action, ind) => {
-  const item = cartItemList.value[ind];
+      if (action === "increment") {
+        item.quantity += 1;
+      } else if (action === "decrement" && item.quantity > 1) {
+        item.quantity -= 1;
+      } else if (action === "delet") {
+        cartItem.value.splice(ind, 1);
+      }
+    };
 
-  if (action === "increment") {
-    item.num += 1;
-  } else if (action === "decrement" && item.num > 1) {
-    item.num -= 1;
-  } else if (action === "delet") {
-    cartItemList.value.splice(ind, 1);
-  }
-};
+    return {
+      bgimg,
+      cartItem,
+      totalPrice,
+      totalProduct,
+      cartItemClose,
+      cartCounterBtn
+    }
+  },
+});
+
+
 </script>
+
 
 <template>
   <div class="page-content bg-white">
@@ -63,7 +79,7 @@ const cartCounterBtn = (action, ind) => {
                 >Filtr</a
               >
             </div>
-            <SearchResuiltRightContent />l
+            <SearchResuiltRightContent />
           </div>
           <div class="col-lg-4">
             <aside class="side-bar sticky-top">
@@ -71,7 +87,7 @@ const cartCounterBtn = (action, ind) => {
                 <div class="d-flex justify-content-between">
                   <div class="widget-title">
                     <h5 class="title m-b30">
-                      Cart <span class="text-primary">(03)</span>
+                      Cart <span class="text-primary">{{ totalProduct }}</span>
                     </h5>
                   </div>
                   <a href="javascript:void(0);" class="panel-close-btn"
@@ -80,7 +96,7 @@ const cartCounterBtn = (action, ind) => {
                 </div>
                 <div
                   class="cart-item style-1"
-                  v-for="(item, ind) in cartItemList"
+                  v-for="(item, ind) in cartItem"
                   :key="ind"
                 >
                   <div class="dz-media">
@@ -101,7 +117,7 @@ const cartCounterBtn = (action, ind) => {
                           <input
                             id="demo_vertical2"
                             type="text"
-                            :value="item.num"
+                            :value="item.quantity"
                             name="demo_vertical2"
                             class="form-control"
                             style="display: block"
@@ -121,7 +137,7 @@ const cartCounterBtn = (action, ind) => {
                           ></span>
                         </div>
                       </div>
-                      <h5 class="price text-primary mb-0">$14.20</h5>
+                      <h5 class="price text-primary mb-0">{{item.priceQuantity}}</h5>
                     </div>
                   </div>
                 </div>
@@ -143,7 +159,7 @@ const cartCounterBtn = (action, ind) => {
                       </tr>
                       <tr class="total">
                         <td><h6>Total</h6></td>
-                        <td class="price text-primary">$63.50</td>
+                        <td class="price text-primary">{{ totalPrice }}</td>
                       </tr>
                     </tbody>
                   </table>

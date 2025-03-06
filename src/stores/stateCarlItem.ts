@@ -4,6 +4,7 @@ interface Product {
     id: number;
     name: string;
     quantity: number;
+    priceQuantity: number;
     price: number;
 }
 
@@ -24,9 +25,11 @@ const cartStore = reactive({
         const existingProduct = this.cart.find(item => item.id === product.id);
         if (existingProduct) {
             existingProduct.quantity += 1;
+            existingProduct.priceQuantity = existingProduct.quantity + existingProduct.price;
         } else {
-            this.cart.push({ ...product, quantity: 1 });
+            this.cart.push({ ...product, quantity: 1, priceQuantity: existingProduct.priceQuantity });
         }
+        console.log(this.cart)
         saveCartToStorage(this.cart);  // Lưu giỏ hàng vào localStorage
     },
 
@@ -48,6 +51,7 @@ const cartStore = reactive({
         const product = this.cart.find(item => item.id === productId);
         if (product) {
             product.quantity = quantity;
+            product.priceQuantity = product.quantity + product.price;
             saveCartToStorage(this.cart);  // Lưu giỏ hàng vào localStorage sau khi thay đổi số lượng
         }
     },
