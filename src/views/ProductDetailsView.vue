@@ -1,6 +1,5 @@
-<script setup>
-import { ref } from "vue";
-import bgimg from "@/assets/images/banner/bnr1.jpg";
+<script lang="ts">
+import {defineComponent, onBeforeMount, ref} from "vue";
 import CommonBanner from "../elements/CommonBanner.vue";
 import testimonialSmallPic1 from "@/assets/images/testimonial/small/pic1.jpg";
 import testimonialSmallPic2 from "@/assets/images/testimonial/small/pic2.jpg";
@@ -12,75 +11,137 @@ import modalMiniPic2 from "@/assets/images/modal/mini/pic2.jpg";
 import modalMiniPic3 from "@/assets/images/modal/mini/pic3.jpg";
 import modalMiniPic4 from "@/assets/images/modal/mini/pic4.jpg";
 import SpacialMenu from "../elements/SpacialMenu.vue";
-import { RouterLink } from "vue-router";
 import Header4 from "../Layouts/Header4.vue";
 import Footer4 from "../Layouts/Footer4.vue";
+// import Swal from "sweetalert2";
+import {getAssetPath} from "@/core/helpers/assets";
+import ApiService from "@/core/services/ApiService";
 
-const avatar = ref([
-  { img: testimonialSmallPic1 },
-  { img: testimonialSmallPic2 },
-  { img: testimonialSmallPic3 },
-  { img: testimonialSmallPic4 },
-  { img: testimonialSmallPic7 },
-]);
+export default defineComponent({
+  name: "product-detail",
+  components: {
+    SpacialMenu,
+    Header4,
+    Footer4,
+    CommonBanner,
+  },
+  props:{
+    isProduct: String
+  },
+  setup(props) {
 
-const addList = ref([
-  { img: modalMiniPic1, title: "French Frise" },
-  { img: modalMiniPic2, title: "Extra Cheese" },
-  { img: modalMiniPic3, title: "Coca Cola" },
-  { img: modalMiniPic4, title: "Choco Lava" },
-]);
+    const productDetail = ref({});
+    const price = ref(0);
+    const productName = ref();
 
-const navItem = ref([
-  { title: "Description" },
-  { title: "Additional Information" },
-  { title: "Product Review" },
-]);
+    const avatar = ref([
+      { img: testimonialSmallPic1 },
+      { img: testimonialSmallPic2 },
+      { img: testimonialSmallPic3 },
+      { img: testimonialSmallPic4 },
+      { img: testimonialSmallPic7 },
+    ]);
 
-let Quantity = ref(1);
-let addActive = ref(0);
-function productQuantityBtn(action) {
-  switch (action) {
-    case "up":
-      Quantity.value < 5 ? (Quantity.value += 1) : Quantity.value;
-      break;
-    case "down":
-      Quantity.value > 1 ? (Quantity.value -= 1) : Quantity.value;
-      break;
-    default:
-      break;
-  }
-}
+    const addList = ref([
+      { img: modalMiniPic1, title: "French Frise" },
+      { img: modalMiniPic2, title: "Extra Cheese" },
+      { img: modalMiniPic3, title: "Coca Cola" },
+      { img: modalMiniPic4, title: "Choco Lava" },
+    ]);
 
-const useReting = (rating) => {
-  let start = document.querySelectorAll("#stars>.star");
-  for (let i = 0; i < rating + 1; i++) {
-    start[i].classList.add("hover");
-  }
-};
-const useRetingover = () => {
-  document
-    .querySelectorAll("#stars>.star")
-    .forEach((el) => el.classList.remove("hover"));
-};
+    const navItem = ref([
+      { title: "Description" },
+      { title: "Additional Information" },
+      { title: "Product Review" },
+    ]);
 
-const addRating = (rating) => {
-  let start = document.querySelectorAll("#stars>.star");
-  start.forEach((el) => el.classList.remove("selected"));
-  for (let i = 0; i < rating + 1; i++) {
-    start[i].classList.add("selected");
-  }
-  alert(`Thanks! You rated this ${rating + 1} stars.`);
-};
+    const getProductDetail = async () => {
+      try {
+        // const response = await ApiService.get('viewDetail/'+ props.isProduct ?? 1);
+        const response = await ApiService.get('menu/viewDetail/1');
+        if (response.status === 200)  {
+          productDetail.value = response?.data;
+          price.value = response?.data.price;
+          productName.value = response?.data.menuName;
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+
+    let Quantity = ref(1);
+    let addActive = ref(0);
+    function productQuantityBtn(action) {
+      switch (action) {
+        case "up":
+          // Quantity.value < 5 ? (Quantity.value += 1) : Quantity.value;
+          Quantity.value += 1
+          price.value = price.value + productDetail.value.price;
+          break;
+        case "down":
+          Quantity.value > 1 ? (Quantity.value -= 1) : Quantity.value;
+          Quantity.value > 1 ? (Quantity.value -= 1) : Quantity.value;
+          price.value = Quantity.value > 1 ? (price.value - productDetail.value.price) : productDetail.value.price;
+          // Quantity.value > 1 ? (Quantity.value -= 1) : Quantity.value;
+          break;
+        default:
+          break;
+      }
+    }
+
+    const useReting = (rating) => {
+      let start = document.querySelectorAll("#stars>.star");
+      for (let i = 0; i < rating + 1; i++) {
+        start[i].classList.add("hover");
+      }
+    };
+    const useRetingover = () => {
+      document
+          .querySelectorAll("#stars>.star")
+          .forEach((el) => el.classList.remove("hover"));
+    };
+
+    const addRating = (rating) => {
+      let start = document.querySelectorAll("#stars>.star");
+      start.forEach((el) => el.classList.remove("selected"));
+      for (let i = 0; i < rating + 1; i++) {
+        start[i].classList.add("selected");
+      }
+      alert(`Thanks! You rated this ${rating + 1} stars.`);
+    };
+
+    onBeforeMount(() => {
+      getProductDetail();
+    });
+
+    return {
+      productDetail,
+      price,
+      productName,
+      avatar,
+      Quantity,
+      addList,
+      addActive,
+      navItem,
+      testimonialSmallPic1,
+      productQuantityBtn,
+      useReting,
+      getAssetPath,
+      useRetingover,
+      addRating,
+    };
+  },
+});
+
+
 </script>
 
 <template>
   <div class="page-content bg-white">
     <Header4 />
     <CommonBanner
-      :img="bgimg"
-      heading="Product Detail"
-      title="Product Detail"
+      :img="testimonialSmallPic1"
+      :title="productName"
     />
     <section class="content-inner-1 overflow-hidden">
       <div class="container">
@@ -112,22 +173,19 @@ const addRating = (rating) => {
                 Pure veg
               </span>
               <div class="dz-head">
-                <h2 class="title">Double Patty Veg Burger</h2>
+                <h2 class="title">{{productDetail.menuName}}</h2>
                 <div class="rating">
                   <i class="fa-solid fa-star"></i>
                   <span
-                    ><strong class="text-dark">4.5</strong> - 20 Reviews</span
+                    ><strong class="text-dark">{{productDetail.ratingStar}}</strong> - {{productDetail.score}} Reviews</span
                   >
                 </div>
               </div>
               <p class="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
+                {{productDetail.shortDescription}}
               </p>
               <ul class="detail-list">
-                <li>Price <span class="text-primary m-t5">$20.00</span></li>
+                <li>Price <span class="text-primary m-t5">{{price}}</span></li>
                 <li>
                   Quantity
                   <div class="btn-quantity style-1 m-t5">

@@ -1,23 +1,67 @@
-<script setup>
+<script lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { ref } from "vue";
-import galleryGridpic1 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridpic2 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridpic3 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridpic4 from "../assets/images/pic4-f47abc27.jpg";
+import {defineComponent, onBeforeMount, ref} from "vue";
 import { Navigation } from "swiper/modules";
 import { RouterLink } from "vue-router";
+import ApiService from "@/core/services/ApiService";
+import gallerySmallPic1 from "@/assets/images/pic3-3cd8c92c.png";
+import cartStore from "@/stores/stateCarlItem";
 
-const carousel = ref([
-  { img: galleryGridpic1, title: "Burger" },
-  { img: galleryGridpic2, title: "Pasta" },
-  { img: galleryGridpic3, title: "Tandoor" },
-  { img: galleryGridpic4, title: "Dal Fry" },
-  { img: galleryGridpic1, title: "Burger" },
-  { img: galleryGridpic2, title: "Pasta" },
-  { img: galleryGridpic3, title: "Tandoor" },
-  { img: galleryGridpic4, title: "Dal Fry" },
-]);
+
+
+
+
+export default defineComponent({
+  name: "todays-menu",
+  components: {
+    Swiper,
+    SwiperSlide,
+    RouterLink
+  },
+  setup() {
+
+    const Navigations = ref(Navigation);
+
+    const carousel = ref();
+
+    const getProduct = async () => {
+      try {
+        const response = await ApiService.get('menuDate/listAll');
+        if (response.status === 200)  {
+          carousel.value = response?.data?.data?.map((item) => {
+            return {
+              ...item,
+              img: gallerySmallPic1,
+              name: item?.menuResponse?.menuName,
+              price: item?.menuResponse?.price,
+              shortDescription: item?.menuResponse?.shortDescription,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+
+    const addToCart = (product) => {
+      cartStore.addToCart(product)
+    }
+
+    onBeforeMount(() => {
+      getProduct();
+    });
+
+    return {
+      carousel,
+      Navigations,
+      addToCart
+    };
+  },
+});
+
+
+
+
 </script>
 
 <template>
@@ -27,7 +71,7 @@ const carousel = ref([
         class="swiper-wrapper"
         :slides-per-view="4"
         :space-between="30"
-        :modules="[Navigation]"
+        :modules="[Navigations]"
         :speed="1200"
         :navigation="{
           prevEl: '.btn-prev-long',
@@ -53,15 +97,14 @@ const carousel = ref([
             <div class="dz-content">
               <div class="dz-info">
                 <h5 class="dz-title mb-0">
-                  <RouterLink to="/our-menu-1">{{ item.title }}</RouterLink>
+                  <RouterLink to="/our-menu-1">{{ item.name }}</RouterLink>
                 </h5>
-                <span class="dz-price">$20.00</span>
+                <span class="dz-price">{{ item.price }}</span>
               </div>
-              <RouterLink
-                to="/shop-cart"
+              <div @click="addToCart"
                 class="btn btn-cart btn-white text-primary btn-square"
                 ><i class="flaticon-shopping-cart"></i
-              ></RouterLink>
+              ></div>
             </div>
           </div>
         </SwiperSlide>

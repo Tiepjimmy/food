@@ -28,12 +28,10 @@ class ApiService {
    */
   public static setHeader(): void {
     const token = JwtService.getToken();
-    console.log(token)
     if (token) {
-      ApiService.vueInstance.config.globalProperties.$axios.defaults.headers.common['Authorization'] = `Token ${token}`;
+      ApiService.vueInstance.config.globalProperties.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     ApiService.vueInstance.config.globalProperties.$axios.defaults.headers.common['Accept'] = 'application/json';
-    console.log(ApiService,3)
   }
 
   // Các phương thức API (GET, POST, PUT, DELETE)

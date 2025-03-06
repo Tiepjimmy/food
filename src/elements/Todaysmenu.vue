@@ -1,31 +1,74 @@
-<script setup>
-import { ref } from "vue";
-import galleryGridPic2 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridPic5 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridPic4 from "../assets/images/pic4-f47abc27.jpg";
-import galleryGridPic6 from "../assets/images/pic4-f47abc27.jpg";
+<script lang="ts">
+
+import {defineComponent, onBeforeMount, ref} from "vue";
+import ApiService from "@/core/services/ApiService";
+import gallerySmallPic1 from "@/assets/images/pic3-3cd8c92c.png";
 import galleryPic1 from "../assets/images/pic4-f47abc27.jpg";
 import galleryPic2 from "../assets/images/pic4-f47abc27.jpg";
 import galleryPic3 from "../assets/images/pic4-f47abc27.jpg";
 import galleryPic4 from "../assets/images/pic4-f47abc27.jpg";
-import { RouterLink } from "vue-router";
+import {RouterLink} from "vue-router";
+import cartStore from "@/stores/stateCarlItem";
 
-const menuList = ref([
-  { img: galleryGridPic2, name: "Pasta", price: "$35.00" },
-  { img: galleryGridPic5, name: "Shake", price: "$55.00" },
-  { img: galleryGridPic4, name: "Dal", price: "$25.00" },
-  { img: galleryGridPic6, name: "Pizza", price: "$90.00" },
-]);
 
-const iconbox = ref([
-  { img: galleryPic1, title: "Restaurant", icon: "flaticon-restaurant" },
-  { img: galleryPic2, title: "Bar", icon: "flaticon-martini" },
-  { img: galleryPic3, title: "Cafe", icon: "flaticon-coffee-cup" },
-  { img: galleryPic4, title: "Dessert", icon: "flaticon-cake" },
-]);
+export default defineComponent({
+  name: "todays-menu",
+  components: {
+    RouterLink,
+  },
+  setup() {
 
-const addActive = ref(1);
-const iconboxActive = ref(1);
+    const addActive = ref(1);
+    const iconboxActive = ref(1);
+
+    const menuList = ref([]);
+
+    const iconbox = ref([
+      { img: galleryPic1, title: "Restaurant", icon: "flaticon-restaurant" },
+      { img: galleryPic2, title: "Bar", icon: "flaticon-martini" },
+      { img: galleryPic3, title: "Cafe", icon: "flaticon-coffee-cup" },
+      { img: galleryPic4, title: "Dessert", icon: "flaticon-cake" },
+    ]);
+
+    const getProduct = async () => {
+      try {
+        const response = await ApiService.get('menuDate/listAll');
+        if (response.status === 200)  {
+          menuList.value = response?.data?.data?.map((item) => {
+            return {
+              ...item,
+              img: gallerySmallPic1,
+              name: item?.menuResponse?.menuName,
+              price: item?.menuResponse?.price,
+              shortDescription: item?.menuResponse?.shortDescription,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+
+    const addToCart = (product) => {
+      cartStore.addToCart(product)
+    }
+
+    onBeforeMount(() => {
+      getProduct();
+    });
+
+    return {
+      addActive,
+      iconboxActive,
+      menuList,
+      iconbox,
+      addToCart
+    };
+  },
+});
+
+
+
 </script>
 
 <template>
@@ -49,7 +92,7 @@ const iconboxActive = ref(1);
           <h5 class="dz-title">
             <RouterLink to="/our-menu-1">{{ item.name }}</RouterLink>
           </h5>
-          <p>Lorem ipsum dolor sit amet, dipiscing elit, sed</p>
+          <p>{{ item.shortDescription }}</p>
         </div>
         <div class="dz-hover-content">
           <div class="dz-info">
@@ -58,11 +101,10 @@ const iconboxActive = ref(1);
             </h5>
             <span class="dz-price">{{ item.price }}</span>
           </div>
-          <RouterLink
-            to="/shop-cart"
+          <div @click="addToCart(item)"
             class="btn btn-cart btn-white text-primary btn-square"
             ><i class="flaticon-shopping-cart"></i
-          ></RouterLink>
+          ></div>
         </div>
       </div>
     </div>

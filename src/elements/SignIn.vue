@@ -8,7 +8,6 @@ import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Register from "@/elements/Register.vue";
-import { Offcanvas } from "bootstrap";
 
 
 export default defineComponent({
@@ -25,7 +24,7 @@ export default defineComponent({
   emits: [
     "update:visible"
   ],
-  setup(props, { emit }) {
+  setup() {
     const store = useAuthStore();
     const router = useRouter();
     const username = ref();

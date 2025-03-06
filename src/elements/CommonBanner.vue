@@ -1,11 +1,35 @@
-<script setup>
+<script lang="ts">
 import { RouterLink } from 'vue-router';
+import {defineComponent, onBeforeMount, ref} from "vue";
+import {getAssetPath} from "@/core/helpers/assets";
+//
+// defineProps({
+//   img: String,
+//   heading: String,
+//   title: String,
+// });
 
-defineProps({
-  img: String,
-  heading: String,
-  title: String,
+
+
+export default defineComponent({
+  name: "common-banner",
+  components: {
+    RouterLink
+  },
+  props:{
+    img: String,
+    title: String
+  },
+  setup(props) {
+    const images = ref(props.img);
+    const name = ref(props.title);
+    return {
+      images,
+      name
+    };
+  },
 });
+
 </script>
 
 <template>
@@ -17,13 +41,13 @@ defineProps({
   >
     <div class="container">
       <div class="dz-bnr-inr-entry">
-        <h1>{{ heading }}</h1>
+        <h1>{{ name }}</h1>
         <!-- Breadcrumb Row -->
         <nav aria-label="breadcrumb" class="breadcrumb-row">
           <ul class="breadcrumb">
             <li class="breadcrumb-item"><RouterLink to="/">Home</RouterLink></li>
             <li class="breadcrumb-item active" aria-current="page">
-              {{ title }}
+              {{ name }}
             </li>
           </ul>
         </nav>
