@@ -1,5 +1,5 @@
 <script lang='ts'>
-import {defineComponent, ref, watch} from "vue";
+import {defineComponent, ref, watch, watchEffect} from "vue";
 import { RouterLink } from "vue-router";
 import {useAuthStore} from "@/stores/auth";
 import {getAssetPath} from "@/core/helpers/assets";
@@ -11,16 +11,13 @@ export default defineComponent({
     RouterLink,
   },
   setup() {
-
     const store = useAuthStore();
     const checkUser = ref(store?.user?.username ? true : false);
 
-    watch(store, async (newQuestion) => {
-      checkUser.value = false;
-      if (newQuestion.user.username) {
-        checkUser.value = true
-      }
-    })
+    watchEffect(() => {
+      checkUser.value = store.isAuthenticated; // Cập nhật checkUser khi isAuthenticated thay đổi
+    });
+
 
 
     const extrainInfoUser = ref(false);

@@ -101,7 +101,7 @@ export default defineComponent({
                 </h5>
                 <span class="dz-price">{{ item.price }}</span>
               </div>
-              <div @click="addToCart"
+              <div @click="addToCart(item)"
                 class="btn btn-cart btn-white text-primary btn-square"
                 ><i class="flaticon-shopping-cart"></i
               ></div>

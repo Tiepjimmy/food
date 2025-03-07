@@ -1,99 +1,90 @@
-<script setup>
-import { ref } from "vue";
+<script lang="ts">
+import {defineComponent, onBeforeMount, ref} from "vue";
 import CommonBanner from "../elements/CommonBanner.vue";
 import SideFilter from "../elements/SideFilter.vue";
 import bgimg from "../assets/images/banner/bnr3.jpg";
-
-import gallerGridpic1 from "@/assets/images/gallery/grid4/pic1.jpg";
-import gallerGridpic2 from "@/assets/images/gallery/grid4/pic2.jpg";
-import gallerGridpic3 from "@/assets/images/gallery/grid4/pic3.jpg";
-import gallerGridpic4 from "@/assets/images/gallery/grid4/pic4.jpg";
-import gallerGridpic5 from "@/assets/images/gallery/grid4/pic5.jpg";
-import gallerGridpic6 from "@/assets/images/gallery/grid4/pic6.jpg";
 import { RouterLink } from "vue-router";
 import Header4 from "../Layouts/Header4.vue";
 import Footer4 from "../Layouts/Footer4.vue";
+import SearchResuiltRightContent from "@/elements/SearchResuiltRightContent.vue";
+import Header from "@/Layouts/Header.vue";
+import cartStore from "@/stores/stateCarlItem";
+import ApiService from "@/core/services/ApiService";
+import gallerySmallPic1 from "@/assets/images/pic3-3cd8c92c.png";
 
-const buttons = ref([
-  { icon: "flaticon-fast-food", name: "ALL" },
-  { icon: "flaticon-cocktail", name: "COLD DRINK" },
-  { icon: "flaticon-pizza-slice", name: "PIZZA" },
-  { icon: "flaticon-salad", name: "SALAD" },
-  { icon: "flaticon-cupcake", name: "SWEETS" },
-  { icon: "flaticon-chili-pepper", name: "SPICY" },
-  { icon: "flaticon-hamburger-1", name: "BURGER" },
-]);
 
-let gallery = [
-  {
-    img: gallerGridpic1,
-    title: "Burger",
-    categery: "COLD DRINK PIZZA BURGER",
-    price: "$4.56",
-  },
-  {
-    img: gallerGridpic2,
-    title: "Chicken Burger",
-    categery: "PIZZA SWEETS",
-    price: "$17.56",
-  },
-  {
-    img: gallerGridpic3,
-    title: "Pineapple Pizza ",
-    categery: "COLD DRINK SALAD SPICY BURGER",
-    price: "$24.50",
-  },
-  {
-    img: gallerGridpic4,
-    title: "Pineapple Soup ",
-    categery: "COLD DRINK SWEETS",
-    price: "$11.02",
-  },
-  {
-    img: gallerGridpic5,
-    title: "Momos ",
-    categery: "PIZZA SPICY BURGER",
-    price: "$4.56",
-  },
-  {
-    img: gallerGridpic6,
-    title: "Pancake ",
-    categery: "SALAD SWEETS BURGER",
-    price: "$12.20",
-  },
-  {
-    img: gallerGridpic4,
-    title: "Pineapple Soup ",
-    categery: "BURGER",
-    price: "$10.50",
-  },
-  {
-    img: gallerGridpic2,
-    title: "Spicy Burger ",
-    categery: "PIZZA SALAD",
-    price: "$4.56",
-  },
-  {
-    img: gallerGridpic1,
-    title: "Cheese Burger",
-    categery: "COLD DRINK SPICY",
-    price: "$17.56",
-  },
-];
 
-let galleryList = gallery;
-const addClass = ref(0);
-const filterButton = (el, name) => {
-  addClass.value = el;
-  let updateItem = gallery.filter((ell) => {
-    return ell.categery.includes(name);
-  });
+export default defineComponent({
+  name: "menu-3-view",
+  components: {
+    CommonBanner,
+    SideFilter,
+    SearchResuiltRightContent,
+    RouterLink,
+    Header4,
+    Header,
+    Footer4,
+  },
+  setup() {
 
-  galleryList = updateItem;
-  if (name === "ALL") {
-    galleryList = gallery;
-  }
-};
+    const buttons = ref([
+      { icon: "flaticon-fast-food", name: "ALL" },
+      { icon: "flaticon-cocktail", name: "COLD DRINK" },
+      { icon: "flaticon-pizza-slice", name: "PIZZA" },
+      { icon: "flaticon-salad", name: "SALAD" },
+      { icon: "flaticon-cupcake", name: "SWEETS" },
+      { icon: "flaticon-chili-pepper", name: "SPICY" },
+      { icon: "flaticon-hamburger-1", name: "BURGER" },
+    ]);
+
+    let galleryList = ref([]);
+    const addClass = ref(0);
+
+    const filterButton = (el, name) => {
+      let gallery = galleryList.value;
+      addClass.value = el;
+      let updateItem = gallery.filter((ell) => {
+        return ell.categery.includes(name);
+      });
+
+      galleryList = updateItem;
+      if (name === "ALL") {
+        galleryList = gallery;
+      }
+    };
+
+    const getProduct = async () => {
+      try {
+        const response = await ApiService.get('menuDate/listAll');
+        if (response.status === 200)  {
+          galleryList.value = response?.data?.data?.map((item) => {
+            return {
+              ...item,
+              img: gallerySmallPic1,
+              name: item?.menuResponse?.menuName,
+              price: item?.menuResponse?.price,
+              shortDescription: item?.menuResponse?.shortDescription,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+
+    onBeforeMount(() => {
+      getProduct();
+    });
+
+    return {
+      buttons,
+      galleryList,
+      bgimg,
+      addClass,
+      filterButton,
+    }
+  },
+});
 
 </script>
 
@@ -142,7 +133,7 @@ const filterButton = (el, name) => {
               </div>
               <div class="dz-content">
                 <h5 class="title">
-                  <RouterLink to="/product-detail">{{ item.title }}</RouterLink>
+                  <RouterLink to="/product-detail">{{ item.name }}</RouterLink>
                 </h5>
                 <p>
                   It is a long established fact that a reader will be distracted

@@ -1,7 +1,7 @@
 <script lang="ts">
 import CommonBanner from "../elements/CommonBanner.vue";
 import SearchResuiltRightContent from "../elements/SearchResuiltRightContent.vue";
-import {computed, defineComponent, ref, watchEffect} from "vue";
+import {computed, defineComponent, ref, watch, watchEffect} from "vue";
 import bgimg from "../assets/images/banner/bnr4.jpg";
 import shopPic1 from "../assets/images/shop/pic1.jpg";
 import shopPic2 from "../assets/images/shop/pic2.jpg";
@@ -34,6 +34,9 @@ export default defineComponent({
     // Sử dụng watchEffect thay vì watch, để theo dõi trực tiếp từ cartStore
     watchEffect(() => {
       cartItem.value = cartStore.cart;  // Cập nhật giỏ hàng khi có thay đổi
+      cartItem.value.forEach(item => {
+        item.totalPrice = item.price * item.quantity;  // Tính toán totalPrice cho mỗi item
+      });
     });
     const cartItemClose = (productId: number) => {
       cartStore.removeFromCart(productId);  // Xóa sản phẩm khỏi giỏ hàng
@@ -60,8 +63,6 @@ export default defineComponent({
     }
   },
 });
-
-
 </script>
 
 
@@ -137,7 +138,7 @@ export default defineComponent({
                           ></span>
                         </div>
                       </div>
-                      <h5 class="price text-primary mb-0">{{item.priceQuantity}}</h5>
+                      <h5 class="price text-primary mb-0">{{item.totalPrice}}</h5>
                     </div>
                   </div>
                 </div>

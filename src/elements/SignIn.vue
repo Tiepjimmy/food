@@ -4,7 +4,6 @@ import { clodeModal } from "@/core/helpers/views";
 import {defineComponent, ref, watch} from "vue";
 import { ErrorMessage, Field, Form as VForm } from "vee-validate";
 import { useAuthStore, type User } from "@/stores/auth";
-import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import Register from "@/elements/Register.vue";
@@ -26,7 +25,6 @@ export default defineComponent({
   ],
   setup() {
     const store = useAuthStore();
-    const router = useRouter();
     const username = ref();
     const password = ref();
     const showPassword = ref(false);
@@ -46,20 +44,15 @@ export default defineComponent({
         username: username.value,
         password: password.value,
       } as User
-      console.log(password,2)
-      // Clear existing errors
-      // store.logout();
-
-      console.log(users)
 
       // Send login request
-      await store.login(users);
+      await await  store.login(users);
       const error = Object.values(store.errors);
 
       if (error.length === 0) {
         clodeModal("offcanvasLogin")
         Swal.fire({
-          text: "Đăng ký thành công!",
+          text: "Đăng nhập thành công!",
           icon: "success",
           buttonsStyling: false,
           confirmButtonText: "Đóng",

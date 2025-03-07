@@ -16,6 +16,7 @@ import Footer4 from "../Layouts/Footer4.vue";
 // import Swal from "sweetalert2";
 import {getAssetPath} from "@/core/helpers/assets";
 import ApiService from "@/core/services/ApiService";
+import cartStore from "@/stores/stateCarlItem";
 
 export default defineComponent({
   name: "product-detail",
@@ -110,6 +111,11 @@ export default defineComponent({
       alert(`Thanks! You rated this ${rating + 1} stars.`);
     };
 
+    const addToCart = (product) => {
+      console.log(product)
+      cartStore.addToCart(product)
+    }
+
     onBeforeMount(() => {
       getProductDetail();
     });
@@ -129,6 +135,7 @@ export default defineComponent({
       getAssetPath,
       useRetingover,
       addRating,
+      addToCart,
     };
   },
 });
@@ -238,14 +245,13 @@ export default defineComponent({
               <div class="d-lg-flex justify-content-between">
                 <ul class="modal-btn-group">
                   <li>
-                    <RouterLink
-                      to="/shop-cart"
+                    <div @click="addToCart(productDetail)"
                       class="btn btn-primary btn-hover-1"
                       ><span
                         >Add To Cart
                         <i class="flaticon-shopping-bag-1 m-l10"></i
                       ></span>
-                    </RouterLink>
+                    </div>
                   </li>
                   <li>
                     <RouterLink
